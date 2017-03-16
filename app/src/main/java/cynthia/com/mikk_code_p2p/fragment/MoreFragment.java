@@ -1,23 +1,19 @@
 package cynthia.com.mikk_code_p2p.fragment;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.loopj.android.http.RequestParams;
+
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import cynthia.com.mikk_code_p2p.R;
-import cynthia.com.mikk_code_p2p.util.UIUtils;
+import cynthia.com.mikk_code_p2p.common.BaseFragment;
 
 /**
  * Created by shkstart on 2016/11/30 0030.
  */
-public class MoreFragment extends Fragment {
+public class MoreFragment extends BaseFragment {
 
     @Bind(R.id.iv_title_back)
     ImageView ivTitleBack;
@@ -26,29 +22,34 @@ public class MoreFragment extends Fragment {
     @Bind(R.id.iv_title_setting)
     ImageView ivTitleSetting;
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        View view = View.inflate(getActivity(), R.layout.fragment_more, null);
-        View view = UIUtils.getView(R.layout.fragment_more);//context实例：application
-        ButterKnife.bind(this, view);
 
-        initTitle();
-        return view;
+    @Override
+    protected RequestParams getParams() {
+        return null;
+    }
+
+    @Override
+    protected String getUrl() {
+        return null;
+    }
+
+    @Override
+    protected void initData(String content) {
+
     }
 
     /**
      * 初始化Title
      */
-    private void initTitle() {
+    public void initTitle() {
         ivTitleBack.setVisibility(View.GONE);
         tvTitle.setText("更多");
         ivTitleSetting.setVisibility(View.GONE);
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
+    public int getLayoutId() {
+        return R.layout.fragment_more;
     }
+
 }
