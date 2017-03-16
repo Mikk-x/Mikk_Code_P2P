@@ -2,6 +2,7 @@ package cynthia.com.mikk_code_p2p.util;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Process;
 import android.view.View;
 
 import cynthia.com.mikk_code_p2p.common.MyApplication;
@@ -51,4 +52,19 @@ public class UIUtils {
         return (int) (px / density + 0.5);//实现四舍五入
     }
 
+    //保证runnable中的操作在主线程中执行
+    public static void runOnUiThread(Runnable runnable) {
+        if (isInMainThread()){
+            runnable.run();
+        }else {
+            UIUtils.getHandler().post(runnable);
+        }
+    }
+
+    // 判断当前县城是否是主线程
+    private static boolean isInMainThread() {
+        int currentThreadId = Process.myTid();
+        return MyApplication.mainThreadId == currentThreadId;
+
+    }
 }

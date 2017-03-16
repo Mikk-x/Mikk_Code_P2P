@@ -6,7 +6,7 @@ package cynthia.com.mikk_code_p2p.common;
  */
 public class AppNetConfig {
 
-    public static final String IPADDRESS = "192.168.1.111";
+    public static final String IPADDRESS = "192.168.1.108";
 
     public static final String BASE_URL = "http://" + IPADDRESS + ":8080/P2PInvest/";
 

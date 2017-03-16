@@ -1,21 +1,15 @@
 package cynthia.com.mikk_code_p2p.fragment;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.os.SystemClock;
+import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -27,109 +21,133 @@ import java.util.Arrays;
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import cynthia.com.mikk_code_p2p.R;
 import cynthia.com.mikk_code_p2p.bean.Image;
 import cynthia.com.mikk_code_p2p.bean.Index;
 import cynthia.com.mikk_code_p2p.bean.Product;
 import cynthia.com.mikk_code_p2p.common.AppNetConfig;
-import cynthia.com.mikk_code_p2p.util.UIUtils;
+import cynthia.com.mikk_code_p2p.common.BaseFragment;
+import cynthia.com.mikk_code_p2p.ui.RoundProgress;
 
 /**
  * Created by shkstart on 2016/11/30 0030.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends BaseFragment {
+
 
     @Bind(R.id.iv_title_back)
-    ImageView ivTitleBack;
+    ImageView mIvTitleBack;
     @Bind(R.id.tv_title)
-    TextView tvTitle;
+    TextView mTvTitle;
     @Bind(R.id.iv_title_setting)
-    ImageView ivTitleSetting;
-    @Bind(R.id.tv_home_product)
-    TextView tvHomeProduct;
-    @Bind(R.id.tv_home_yearrate)
-    TextView tvHomeYearrate;
+    ImageView mIvTitleSetting;
     @Bind(R.id.banner)
     Banner mBanner;
+    @Bind(R.id.tv_home_product)
+    TextView mTvHomeProduct;
+    @Bind(R.id.roundPro_home)
+    RoundProgress mRoundProHome;
+    @Bind(R.id.tv_home_yearrate)
+    TextView mTvHomeYearrate;
 
-    @Nullable
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            mRoundProHome.setMax(100);
+            for (int i = 0; i < currentProress; i++) {
+                mRoundProHome.setProgress(i + 1);
+
+                SystemClock.sleep(20);
+                //强制重绘
+//                roundProHome.invalidate();//只有主线程才可以如此调用
+                mRoundProHome.postInvalidate();//主线程、分线程都可以如此调用
+            }
+        }
+    };
+
+    private int currentProress;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = UIUtils.getView(R.layout.fragment_home);//context实例：application
-//        View view = View.inflate(getActivity(), R.layout.fragment_home, null);
-        ButterKnife.bind(this, view);
+    protected RequestParams getParams() {
+        return null;
+    }
 
-        //初始化title
-        initTitle();
-
-        //初始化数据
-        initData();
-
-        return view;
+    @Override
+    protected String getUrl() {
+        return AppNetConfig.INDEX;
     }
 
     private Index index;
 
-    /**
-     * 初始化数据
-     */
-    private void initData() {
+    @Override
+    protected void initData(String content) {
 
-        index = new Index();
-        AsyncHttpClient client = new AsyncHttpClient();
-        //访问的url
-        String url = AppNetConfig.INDEX;
-        client.post(url, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(String content) {//200：响应成功
-                //解析json数据：GSON / FASTJSON
-                JSONObject jsonObject = JSON.parseObject(content);
-                //解析json对象数据
-                String proInfo = jsonObject.getString("proInfo");
-                Product product = JSON.parseObject(proInfo, Product.class);
-                //解析json数组数据
-                String imageArr = jsonObject.getString("imageArr");
-                List<Image> images = jsonObject.parseArray(imageArr, Image.class);
-                index.product = product;
-                index.images = images;
-                //更新页面数据
-                tvHomeProduct.setText(product.name);
-                tvHomeYearrate.setText(product.yearRate + "%");
+        if (!TextUtils.isEmpty(content)){
+            index = new Index();
 
-                //设置banner样式
-                mBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE);
-                //设置图片加载器
-                mBanner.setImageLoader(new GlideImageLoader());
-                //设置图片地址构成的集合
-                ArrayList<String> imagesUrl = new ArrayList<String>(index.images.size());
+            //解析json数据：GSON / FASTJSON
+            JSONObject jsonObject = JSON.parseObject(content);
+            //解析json对象数据
+            String proInfo = jsonObject.getString("proInfo");
+            Product product = JSON.parseObject(proInfo, Product.class);
+            //解析json数组数据
+            String imageArr = jsonObject.getString("imageArr");
+            List<Image> images = jsonObject.parseArray(imageArr, Image.class);
+            index.product = product;
+            index.images = images;
+            //更新页面数据
+            mTvHomeProduct.setText(product.name);
+            mTvHomeYearrate.setText(product.yearRate + "%");
+
+            currentProress = Integer.parseInt(index.product.progress);
+
+
+            //在分线程中，实现进度的动态变化
+            new Thread(runnable).start();
+
+
+            //设置banner样式
+            mBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE);
+            //设置图片加载器
+            mBanner.setImageLoader(new GlideImageLoader());
+            //设置图片地址构成的集合
+            ArrayList<String> imagesUrl = new ArrayList<String>(index.images.size());
 //                ArrayList<String> imagesUrl = new ArrayList<String>(index.images.size());
 //                for(int i = 0; i < imagesUrl.size(); i++) {//imagesUrl.size():0
-                for (int i = 0; i < index.images.size(); i++) {//index.images.size():4
-                    imagesUrl.add(index.images.get(i).IMAURL);
-                }
+            for (int i = 0; i < index.images.size(); i++) {//index.images.size():4
+                imagesUrl.add(index.images.get(i).IMAURL);
+            }
 //                Log.e("TAG","imagesUrl"+imagesUrl);
-                mBanner.setImages(imagesUrl);
-                //设置banner动画效果
-                mBanner.setBannerAnimation(Transformer.DepthPage);
-                //设置标题集合（当banner样式有显示title时）
-                String[] titles = new String[]{"分享砍学费", "人脉总动员", "想不到你是这样的app", "购物节，爱不单行"};
-                mBanner.setBannerTitles(Arrays.asList(titles));
-                //设置自动轮播，默认为true
-                mBanner.isAutoPlay(true);
-                //设置轮播时间
-                mBanner.setDelayTime(1500);
-                //设置指示器位置（当banner模式中有指示器时）
-                mBanner.setIndicatorGravity(BannerConfig.CENTER);
-                //banner设置方法全部调用完毕时最后调用
-                mBanner.start();
-            }
+            mBanner.setImages(imagesUrl);
+            //设置banner动画效果
+            mBanner.setBannerAnimation(Transformer.DepthPage);
+            //设置标题集合（当banner样式有显示title时）
+            String[] titles = new String[]{"分享砍学费", "人脉总动员", "想不到你是这样的app", "购物节，爱不单行"};
+            mBanner.setBannerTitles(Arrays.asList(titles));
+            //设置自动轮播，默认为true
+            mBanner.isAutoPlay(true);
+            //设置轮播时间
+            mBanner.setDelayTime(1500);
+            //设置指示器位置（当banner模式中有指示器时）
+            mBanner.setIndicatorGravity(BannerConfig.CENTER);
+            //banner设置方法全部调用完毕时最后调用
+            mBanner.start();
+        }
 
-            @Override
-            public void onFailure(Throwable error, String content) {//响应失败
-                Toast.makeText(UIUtils.getContext(), "联网获取数据失败", Toast.LENGTH_SHORT).show();
-            }
-        });
+
+    }
+
+    @Override
+    protected void initTitle() {
+
+        mIvTitleBack.setVisibility(View.GONE);
+        mTvTitle.setText("首页");
+        mIvTitleSetting.setVisibility(View.GONE);
+    }
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.fragment_home;
     }
 
     public class GlideImageLoader extends ImageLoader {
@@ -150,21 +168,5 @@ public class HomeFragment extends Fragment {
             Picasso.with(context).load((String) path).into(imageView);
 
         }
-    }
-
-
-    /**
-     * 初始化Title
-     */
-    private void initTitle() {
-        ivTitleBack.setVisibility(View.GONE);
-        tvTitle.setText("首页");
-        ivTitleSetting.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
     }
 }

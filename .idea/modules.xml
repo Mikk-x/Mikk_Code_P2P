@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Mikk_Code_P2p2.iml" filepath="$PROJECT_DIR$/Mikk_Code_P2p2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Mikk_Code_P2P.iml" filepath="$PROJECT_DIR$/Mikk_Code_P2P.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ViewPagerIndicator/ViewPagerIndicator.iml" filepath="$PROJECT_DIR$/ViewPagerIndicator/ViewPagerIndicator.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
