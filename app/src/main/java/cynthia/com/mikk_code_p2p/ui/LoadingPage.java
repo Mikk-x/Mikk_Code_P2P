@@ -34,7 +34,7 @@ public abstract class LoadingPage extends FrameLayout {
     private View view_success;
     private LayoutParams params;
 
-
+    private Context mContext;
     public LoadingPage(Context context) {
         this(context, null);
     }
@@ -45,7 +45,7 @@ public abstract class LoadingPage extends FrameLayout {
 
     public LoadingPage(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
+        this.mContext = context;
         init();
     }
 
@@ -98,7 +98,8 @@ public abstract class LoadingPage extends FrameLayout {
         view_empty.setVisibility(state_current == STATE_EMPTY ? View.VISIBLE : View.INVISIBLE);
 
         if (view_success == null) {
-            view_success = UIUtils.getView(layoutId());
+//            view_success = UIUtils.getView(layoutId());// 加载布局使用的是Application
+            view_success = View.inflate(mContext,layoutId(),null);// 家在布局使用的是Activity
             addView(view_success, params);
         }
 
