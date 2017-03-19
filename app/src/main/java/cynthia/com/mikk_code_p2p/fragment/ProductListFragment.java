@@ -1,6 +1,7 @@
 package cynthia.com.mikk_code_p2p.fragment;
 
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -10,6 +11,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import cynthia.com.mikk_code_p2p.R;
+import cynthia.com.mikk_code_p2p.adapter.ProductAdapter;
 import cynthia.com.mikk_code_p2p.bean.Product;
 import cynthia.com.mikk_code_p2p.common.AppNetConfig;
 import cynthia.com.mikk_code_p2p.common.BaseFragment;
@@ -19,8 +21,8 @@ import cynthia.com.mikk_code_p2p.common.BaseFragment;
  * ListView的使用：①ListView ②BaseAdapter ③Item Layout ④集合数据 (联网获取数据）
  */
 public class ProductListFragment extends BaseFragment {
-//    @Bind(R.id.tv_product_title)
-//    TextView tvProductTitle;
+    @Bind(R.id.tv_product_title)
+    TextView tvProductTitle;
     @Bind(R.id.lv_product_list)
     ListView lvProductList;
     private List<Product> productList;
@@ -41,7 +43,7 @@ public class ProductListFragment extends BaseFragment {
 //        tvProductTitle.setFocusable(true);
 //        tvProductTitle.setFocusableInTouchMode(true);
 //        tvProductTitle.requestFocus();
-        //方式二：提供TextView的子类，重写isFocus(),返回true即可。
+        //方式二：提供TextView的子类，重写isFocus(),返回true即可。MyTextView类
 
         JSONObject jsonObject = JSON.parseObject(content);
         boolean success = jsonObject.getBoolean("success");
@@ -63,8 +65,8 @@ public class ProductListFragment extends BaseFragment {
 //            lvProductList.setAdapter(productAdapter2);//显示列表
 
             //方式四：抽取了，最好的方式.（可以作为选择）
-//            ProductAdapter3 productAdapter3 = new ProductAdapter3(productList);
-//            lvProductList.setAdapter(productAdapter3);//显示列表
+            ProductAdapter productAdapter = new ProductAdapter(productList);
+            lvProductList.setAdapter(productAdapter);//显示列表
         }
     }
 

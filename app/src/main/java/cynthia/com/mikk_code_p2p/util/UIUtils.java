@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Process;
 import android.view.View;
+import android.widget.Toast;
 
 import cynthia.com.mikk_code_p2p.common.MyApplication;
 
@@ -66,5 +67,9 @@ public class UIUtils {
         int currentThreadId = Process.myTid();
         return MyApplication.mainThreadId == currentThreadId;
 
+    }
+
+    public static void toast(String message,boolean isLengthLong){
+        Toast.makeText(UIUtils.getContext(), message,isLengthLong? Toast.LENGTH_LONG : Toast.LENGTH_SHORT).show();
     }
 }

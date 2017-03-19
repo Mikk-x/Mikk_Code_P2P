@@ -4,13 +4,9 @@
     android:layout_height="match_parent">
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="推荐理财"
-        android:textSize="40sp"
-        android:textColor="@color/title_back"
-
-        />
+    <cynthia.com.mikk_code_p2p.ui.randomLayout.StellarMap
+        android:id="@+id/stellar_map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></cynthia.com.mikk_code_p2p.ui.randomLayout.StellarMap>
 
 </LinearLayout>
