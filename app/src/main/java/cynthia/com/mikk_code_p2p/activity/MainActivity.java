@@ -1,9 +1,7 @@
 package cynthia.com.mikk_code_p2p.activity;
 
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -16,17 +14,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cynthia.com.mikk_code_p2p.R;
-import cynthia.com.mikk_code_p2p.common.ActivityManager;
+import cynthia.com.mikk_code_p2p.common.BaseActivity;
 import cynthia.com.mikk_code_p2p.fragment.HomeFragment;
 import cynthia.com.mikk_code_p2p.fragment.InvestFragment;
 import cynthia.com.mikk_code_p2p.fragment.MeFragment;
 import cynthia.com.mikk_code_p2p.fragment.MoreFragment;
 import cynthia.com.mikk_code_p2p.util.UIUtils;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends BaseActivity {
 
 
     @Bind(R.id.fl_main)
@@ -60,21 +57,23 @@ public class MainActivity extends FragmentActivity {
     // FragmentTransaction 事务控制~~
     private FragmentTransaction transaction;
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
-
-        /**
-         * 将当前的activity添加到ActivitManager中
-         */
-        ActivityManager.getInstance().add(this);
-
+    protected void initData() {
         /**
          * 默认显示首页
          */
         setSelect(0);
+    }
+
+    @Override
+    protected void initTitle() {
+
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_main;
     }
 
     /**

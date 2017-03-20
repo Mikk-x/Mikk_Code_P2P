@@ -147,10 +147,11 @@ public class ProductRecommondFragment extends BaseFragment {
         //返回下一组显示缩放动画的组别。
         @Override
         public int getNextGroupOnZoom(int group, boolean isZoomIn) {
-            if (group == 0)
+            if (group == 0) {
                 return 1;
-            else
+            } else {
                 return 0;
+            }
         }
     }
 
