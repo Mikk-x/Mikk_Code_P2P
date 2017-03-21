@@ -31,4 +31,7 @@ dependencies {
     compile 'com.youth.banner:banner:1.4.2'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile project(':ViewPagerIndicator')
+    compile files('libs/alipaysdk.jar')
+    compile files('libs/alipaysecsdk.jar')
+    compile files('libs/alipayutdid.jar')
 }

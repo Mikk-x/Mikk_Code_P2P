@@ -1,6 +1,5 @@
 package cynthia.com.mikk_code_p2p.common;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -53,7 +52,7 @@ public abstract class BaseActivity extends FragmentActivity {
     }
 
     //销毁当前的Activity
-    public void removeCurrentActivity(Activity activity){
+    public void removeCurrentActivity(){
         ActivityManager.getInstance().removeCurrent();
     }
 
