@@ -23,8 +23,11 @@ import java.io.File;
 import butterknife.Bind;
 import butterknife.OnClick;
 import cynthia.com.mikk_code_p2p.R;
+import cynthia.com.mikk_code_p2p.activity.BarChartActivity;
 import cynthia.com.mikk_code_p2p.activity.ChongZhiActivity;
+import cynthia.com.mikk_code_p2p.activity.LineChartActivity;
 import cynthia.com.mikk_code_p2p.activity.LoginActivity;
+import cynthia.com.mikk_code_p2p.activity.PieChartActivity;
 import cynthia.com.mikk_code_p2p.activity.TiXianActivity;
 import cynthia.com.mikk_code_p2p.activity.UserInfoActivity;
 import cynthia.com.mikk_code_p2p.bean.User;
@@ -201,5 +204,21 @@ public class MeFragment extends BaseFragment {
     @OnClick(R.id.withdraw)
     public void withdraw(View view){
         ((BaseActivity)this.getActivity()).goToActivity(TiXianActivity.class,null);
+    }
+
+    //启动折线图
+    @OnClick(R.id.ll_touzi)
+    public void startLineChart(View view){
+        ((BaseActivity)this.getActivity()).goToActivity(LineChartActivity.class,null);
+    }
+    //启动折线图
+    @OnClick(R.id.ll_touzi_zhiguan)
+    public void startBarChart(View view){
+        ((BaseActivity)this.getActivity()).goToActivity(BarChartActivity.class,null);
+    }
+    //启动折线图
+    @OnClick(R.id.ll_zichan)
+    public void startPieChart(View view){
+        ((BaseActivity)this.getActivity()).goToActivity(PieChartActivity.class,null);
     }
 }
