@@ -25,6 +25,7 @@ import butterknife.OnClick;
 import cynthia.com.mikk_code_p2p.R;
 import cynthia.com.mikk_code_p2p.activity.BarChartActivity;
 import cynthia.com.mikk_code_p2p.activity.ChongZhiActivity;
+import cynthia.com.mikk_code_p2p.activity.GestureVerifyActivity;
 import cynthia.com.mikk_code_p2p.activity.LineChartActivity;
 import cynthia.com.mikk_code_p2p.activity.LoginActivity;
 import cynthia.com.mikk_code_p2p.activity.PieChartActivity;
@@ -128,6 +129,14 @@ public class MeFragment extends BaseFragment {
                 return "";
             }
         }).into(ivMeIcon);
+
+        //判断一下，是否开启了手势密码。如果开启：先输入手势密码
+        SharedPreferences sp = this.getActivity().getSharedPreferences("secret_protect", Context.MODE_PRIVATE);
+        boolean isOpen = sp.getBoolean("isOpen", false);
+        if(isOpen){
+            ((BaseActivity)this.getActivity()).goToActivity(GestureVerifyActivity.class,null);
+            return;
+        }
     }
 
     //给出提示：登录
