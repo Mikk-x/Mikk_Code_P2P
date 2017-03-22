@@ -1,11 +1,14 @@
 package cynthia.com.mikk_code_p2p.fragment;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -25,6 +28,7 @@ import butterknife.Bind;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import cynthia.com.mikk_code_p2p.R;
 import cynthia.com.mikk_code_p2p.activity.GestureEditActivity;
+import cynthia.com.mikk_code_p2p.activity.GuiGuInvestActivity;
 import cynthia.com.mikk_code_p2p.activity.UserRegistActivity;
 import cynthia.com.mikk_code_p2p.common.AppNetConfig;
 import cynthia.com.mikk_code_p2p.common.BaseActivity;
@@ -97,6 +101,18 @@ public class MoreFragment extends BaseFragment {
         //分享
         share();
 
+        //关于硅谷理财
+        aboutInvest();
+
+    }
+
+    private void aboutInvest() {
+        tvMoreAbout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((BaseActivity) MoreFragment.this.getActivity()).goToActivity(GuiGuInvestActivity.class, null);
+            }
+        });
     }
 
     private void share() {
@@ -138,6 +154,7 @@ public class MoreFragment extends BaseFragment {
     }
 
     private String department = "不明确";
+
     private void commitFanKui() {
         tvMoreFankui.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,18 +183,18 @@ public class MoreFragment extends BaseFragment {
                                 AsyncHttpClient client = new AsyncHttpClient();
                                 String url = AppNetConfig.FEEDBACK;
                                 RequestParams params = new RequestParams();
-                                params.put("department",department);
-                                params.put("content",content);
-                                client.post(url,params,new AsyncHttpResponseHandler(){
+                                params.put("department", department);
+                                params.put("content", content);
+                                client.post(url, params, new AsyncHttpResponseHandler() {
                                     @Override
                                     public void onSuccess(String content) {
-                                        UIUtils.toast("发送反馈信息成功",false);
+                                        UIUtils.toast("发送反馈信息成功", false);
 
                                     }
 
                                     @Override
                                     public void onFailure(Throwable error, String content) {
-                                        UIUtils.toast("发送反馈信息失败",false);
+                                        UIUtils.toast("发送反馈信息失败", false);
 
                                     }
                                 });
@@ -205,6 +222,9 @@ public class MoreFragment extends BaseFragment {
                                 //使用隐式意图，启动系统拨号应用界面
                                 Intent intent = new Intent(Intent.ACTION_CALL);
                                 intent.setData(Uri.parse("tel:" + phone));
+                                if (ActivityCompat.checkSelfPermission(MoreFragment.this.getActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                    return;
+                                }
                                 MoreFragment.this.getActivity().startActivity(intent);
                             }
                         })
